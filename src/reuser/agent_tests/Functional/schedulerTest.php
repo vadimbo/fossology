@@ -391,7 +391,7 @@ class SchedulerTest extends \PHPUnit_Framework_TestCase
     $this->dbManager->queryOnce("UPDATE uploadtree_a SET pfile_fk=351 WHERE uploadtree_pk=$originallyClearedItemId+$reusingUploadItemShift",
             __METHOD__.'.minorChange');
 
-    $this->uploadDao->addReusedUpload($uploadId=3,$reusedUpload=2,$this->groupId,$this->groupId,$reuseMode=1);
+    $this->uploadDao->addReusedUpload($uploadId=3,$reusedUpload=2,$this->groupId,$this->groupId,$reuseMode=2);
 
     $repoPath = $this->testDb->getFossSysConf().'/repo/files/';
     $this->treeDao->shouldReceive('getRepoPathOfPfile')->with(4)->andReturn($repoPath.'04621571bcbabce75c4dd1c6445b87dec0995734.59cacdfce5051cd8a1d8a1f2dcce40a5.12320');

@@ -26,7 +26,11 @@ use Symfony\Component\HttpFoundation\Request;
 class ReuserAgentPlugin extends AgentPlugin
 {
   const UPLOAD_TO_REUSE_SELECTOR_NAME = 'uploadToReuse';
-    
+  const REUSE_NONE = 0;
+  const REUSE_ENHANCED = 2;
+  const REUSE_MAIN = 4;
+  const REUSE_ALL = 8;
+
   /** @var UploadDao */
   private $uploadDao;
   
@@ -88,8 +92,24 @@ class ReuserAgentPlugin extends AgentPlugin
     }
     $groupId = $request->get('groupId', Auth::getGroupId());
     
-    $reuseModeVal = $request->get('reuseMode');
-    $reuseMode = empty($reuseModeVal) ? 0 : 1;
+    $getReuseValue = $request->get('reuseMode');
+
+    $reuseMode=self::REUSE_NONE;
+
+    if(!empty($getReuseValue)){
+      if(count($getReuseValue)<2){
+        if(in_array('reuseMain', $getReuseValue)){
+          $reuseMode=self::REUSE_MAIN;
+        }
+        else{
+	  $reuseMode=self::REUSE_ENHANCED;
+	}
+      }
+      else{
+        $reuseMode=self::REUSE_ALL;
+      }
+    }
+
     $this->createPackageLink($uploadId, $reuseUploadId, $groupId, $reuseGroupId, $reuseMode);
     
     return $this->doAgentAdd($jobId, $uploadId, $errorMsg, array("agent_adj2nest"), $uploadId);

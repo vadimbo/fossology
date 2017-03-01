@@ -75,14 +75,40 @@ class ReuserAgent extends Agent
       {
         continue;
       }
-      if (empty($reuseMode)) {
-        $this->processUploadReuse($itemTreeBounds, $itemTreeBoundsReused, $reusedGroupId);
-      } else {
+      if($reuseMode&(1<<1)){
         $this->processEnhancedUploadReuse($itemTreeBounds, $itemTreeBoundsReused, $reusedGroupId);
+      }
+      elseif($reuseMode&(1<<2)){
+        $this->reuseMainLicense($uploadId, $this->groupId, $reusedUploadId, $reusedGroupId);
+      }
+      elseif($reuseMode&(1<<3)){
+        $this->reuseMainLicense($uploadId, $this->groupId, $reusedUploadId, $reusedGroupId);
+        $this->processEnhancedUploadReuse($itemTreeBounds, $itemTreeBoundsReused, $reusedGroupId);
+      }
+     else{
+        $this->processUploadReuse($itemTreeBounds, $itemTreeBoundsReused, $reusedGroupId);
       }
     }
     return true;
   }  
+
+  protected function reuseMainLicense($uploadId, $groupId, $reusedUploadId, $reusedGroupId)
+  {
+    $mainLicenseIds = $this->clearingDao->getMainLicenseIds($reusedUploadId, $reusedGroupId);
+    if(!empty($mainLicenseIds))
+    {
+      foreach($mainLicenseIds as $mainLicenseId)
+      {
+	if(in_array($mainLicenseId, $this->clearingDao->getMainLicenseIds($uploadId, $groupId))){
+	  continue;
+	}
+	else{
+          $this->clearingDao->makeMainLicense($uploadId, $groupId, $mainLicenseId);
+	}
+      }
+    }
+    return true;
+  }
 
   protected function processUploadReuse($itemTreeBounds, $itemTreeBoundsReused, $reusedGroupId)
   {
