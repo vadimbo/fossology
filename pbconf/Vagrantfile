@@ -23,7 +23,7 @@ Vagrant.configure("2") do |config|
   end
 
   config.vm.synced_folder "..", "/home/vagrant/prj/fossology", type: "rsync"
-  config.vm.network "forwarded_port", guest: 80, host: 8081
+  config.vm.network "forwarded_port", guest: 80, host: 8082
 
 #
 # part to prepare dependencies
@@ -39,8 +39,8 @@ wget https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
 rpm -Uvh epel-release-latest-7.noarch.rpm
 
 # install projectbuilder
-wget http://ftp.project-builder.org/centos/7/x86_64/pb.repo
-cp pb.repo /etc/yum.repos.d/
+wget http://ftp.project-builder.org/test/centos/7/x86_64/pb-test.repo
+cp pb-test.repo /etc/yum.repos.d/
 
 # not using gpg checking is not recommended
 # yum update -y --nogpgcheck
@@ -63,6 +63,18 @@ yum install -y docker-engine
 
 # ... starting docker
 systemctl start docker
+
+# ... installing composer things
+# cd /home/vagrant/prj/fossology
+mkdir -p /home/vagrant/composer/
+/home/vagrant/prj/fossology/utils/install_composer.sh /home/vagrant/composer/
+export COMPOSER_PHAR=/home/vagrant/composer/composer
+mkdir /home/vagrant/prj/fossology/src/vendor
+chown vagrant:vagrant /home/vagrant/prj/fossology/src/vendor
+
+# ... should be done, but possible only later
+# cd /home/vagrant/prj/fossology/src/
+# make DESTDIR=/home/vagrant/prj/fossology/src/ MODDIR=vendor/ composer_install
 
 SCRIPT
   end
@@ -95,10 +107,14 @@ pbconfdir fossology = \\\$ENV{'HOME'}/prj/fossology/pbconf
 PBRC
 
 ################################################################################
-# sbx = sandbox
+#sbx = sandbox
+
+# git checkout could be done here if need for overwrite is needed ...
+
 pb -t -p fossology sbx2build   fossology
 pb    -p fossology build2prep  fossology
-# pb -t -p fossology sbx2pkg     fossology # actually, sbx2pkg is included in sbx2pkg2ins
+# actually, sbx2pkg is included in sbx2pkg2ins
+#pb -t -p fossology sbx2pkg     fossology 
 pb -t -p fossology sbx2pkg2ins fossology
 
 SCRIPT
@@ -110,9 +126,9 @@ SCRIPT
   config.vm.provision "shell" do |s|
     s.privileged = false
     s.inline = <<SCRIPT
-# uahhh: disabling SELinux
+# todo disabling SELinux only at first start is needed but should be put in policies
 # remove if the https://github.com/fossology/fossology/issues/727
-setenforce 0
+sudo setenforce 0
 
 SCRIPT
   end
