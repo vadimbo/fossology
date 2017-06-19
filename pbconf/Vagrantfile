@@ -68,13 +68,8 @@ systemctl start docker
 # cd /home/vagrant/prj/fossology
 mkdir -p /home/vagrant/composer/
 /home/vagrant/prj/fossology/utils/install_composer.sh /home/vagrant/composer/
-export COMPOSER_PHAR=/home/vagrant/composer/composer
 mkdir /home/vagrant/prj/fossology/src/vendor
 chown vagrant:vagrant /home/vagrant/prj/fossology/src/vendor
-
-# ... should be done, but possible only later
-# cd /home/vagrant/prj/fossology/src/
-# make DESTDIR=/home/vagrant/prj/fossology/src/ MODDIR=vendor/ composer_install
 
 SCRIPT
   end
@@ -110,6 +105,9 @@ PBRC
 #sbx = sandbox
 
 # git checkout could be done here if need for overwrite is needed ...
+
+# Give the ref to where composer is on the VM
+export COMPOSER_PHAR=/home/vagrant/composer/composer
 
 pb -t -p fossology sbx2build   fossology
 pb    -p fossology build2prep  fossology
