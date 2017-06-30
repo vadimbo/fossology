@@ -17,8 +17,8 @@ Group:          PBGRP
 Url:            PBURL
 Source:         PBSRC
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(id -u -n)
-Requires:       fossology-web fossology-scheduler fossology-ununpack fossology-copyright fossology-buckets fossology-mimetype fossology-delagent fossology-wgetagent
-#Recommends:		fossology-decider, fossology-spdx2, fossology-reuser, fossology-ninka
+Requires:       fossology-web fossology-scheduler fossology-ununpack fossology-copyright fossology-buckets fossology-mimetype fossology-delagent fossology-wgetagent fossology-decider fossology-spdx2 fossology-reuser
+#Recommends:		fossology-decider, fossology-spdx2, fossology-reuse,fossology-ninka
 BuildRequires:  postgresql-devel >= 8.1.11,glib2-devel,libxml2,gcc,make,perl,rpm-devel,pcre-devel,openssl-devel,gcc-c++,php,boost-devel,php-phar,curl,PBBUILDDEP
 Summary:        FOSSology is a license compliance analysis  tool
 
@@ -97,11 +97,12 @@ Requires:       fossology-web
 Summary:        SPDX and DEP5 extensions
 Group:          PBGRP
 
-%package ninka
-Requires:       fossology-common
+# TODO reactivate ninka 
+#%package ninka
+#Requires:       fossology-common
 #Recommends:     ninka >=1.2
-Summary:        Architecture for analyzing software, Ninka
-Group:          PBGRP
+#Summary:        Architecture for analyzing software, Ninka
+#Group:          PBGRP
 
 %package decider
 Requires:       fossology-common
@@ -183,8 +184,8 @@ This package contains the debug UI.
 %description spdx2
 This package contains the SPDX v2 agent programs and their resources.
 
-%description ninka
-This package contains the ninka wrapper agent programs and their resources.
+# %description ninka
+# This package contains the ninka wrapper agent programs and their resources.
 
 %description decider
 This package contains the decider agent programs and their resources.
@@ -315,31 +316,37 @@ cp VERSION $RPM_BUILD_ROOT%{_sysconfdir}/PBPROJ/
 %{_sysconfdir}/PBPROJ/mods-enabled/readmeoss
 %{_datadir}/PBPROJ/readmeoss/*
 
-%files ninka
-%{_sysconfdir}/PBPROJ/mods-enabled/ninka
-%{_datadir}/PBPROJ/ninka/*
+#%files ninka
+#%defattr(-,root,root)
+#%{_sysconfdir}/PBPROJ/mods-enabled/ninka
+#%{_datadir}/PBPROJ/ninka/*
 
 %files decider
+%defattr(-,root,root)
 %dir %{_datadir}/PBPROJ/decider
 %{_sysconfdir}/PBPROJ/mods-enabled/decider
 %{_datadir}/PBPROJ/decider/*
 
 %files deciderjob
+%defattr(-,root,root)
 %dir %{_datadir}/PBPROJ/deciderjob
 %{_sysconfdir}/PBPROJ/mods-enabled/deciderjob
 %{_datadir}/PBPROJ/deciderjob/*
 
 %files reuser
+%defattr(-,root,root)
 %dir %{_datadir}/PBPROJ/reuser
 %{_sysconfdir}/PBPROJ/mods-enabled/reuser
 %{_datadir}/PBPROJ/reuser/*
 
 %files monk
+%defattr(-,root,root)
 %dir %{_datadir}/PBPROJ/monk
 %{_sysconfdir}/PBPROJ/mods-enabled/monk
 %{_datadir}/PBPROJ/monk/*
 
 %files monkbulk
+%defattr(-,root,root)
 %dir %{_datadir}/PBPROJ/monkbulk
 %{_sysconfdir}/PBPROJ/mods-enabled/monkbulk
 %{_datadir}/PBPROJ/monkbulk/*
@@ -481,6 +488,66 @@ fi
 /usr/lib/PBPROJ/fo-postinstall --scheduler-only
 
 %post
+# Run the postinstall script
+/usr/lib/PBPROJ/fo-postinstall --agent
+
+#
+# post: agent independency ops
+#
+
+%post ununpack
+# Run the postinstall script
+/usr/lib/PBPROJ/fo-postinstall --agent
+
+%post copyright
+# Run the postinstall script
+/usr/lib/PBPROJ/fo-postinstall --agent
+
+%post buckets
+# Run the postinstall script
+/usr/lib/PBPROJ/fo-postinstall --agent
+
+%post mimetype
+# Run the postinstall script
+/usr/lib/PBPROJ/fo-postinstall --agent
+
+%post nomos
+# Run the postinstall script
+/usr/lib/PBPROJ/fo-postinstall --agent
+
+%post pkgagent
+# Run the postinstall script
+/usr/lib/PBPROJ/fo-postinstall --agent
+
+%post delagent
+# Run the postinstall script
+/usr/lib/PBPROJ/fo-postinstall --agent
+
+%post wgetagent
+# Run the postinstall script
+/usr/lib/PBPROJ/fo-postinstall --agent
+
+%post spdx2
+# Run the postinstall script
+/usr/lib/PBPROJ/fo-postinstall --agent
+
+%post decider
+# Run the postinstall script
+/usr/lib/PBPROJ/fo-postinstall --agent
+
+%post deciderjob
+# Run the postinstall script
+/usr/lib/PBPROJ/fo-postinstall --agent
+
+%post reuser
+# Run the postinstall script
+/usr/lib/PBPROJ/fo-postinstall --agent
+
+%post monk
+# Run the postinstall script
+/usr/lib/PBPROJ/fo-postinstall --agent
+
+%post monkbulk
 # Run the postinstall script
 /usr/lib/PBPROJ/fo-postinstall --agent
 
