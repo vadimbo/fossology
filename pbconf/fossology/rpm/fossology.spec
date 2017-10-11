@@ -211,9 +211,8 @@ This package contains the monkbulk agent programs and their resources.
 %setup -q -n %{name}-%{version}PBEXTDIR
 #PBPATCHCMD
 
-#mkdir -p /home/vagrant/composer/
-#utils/install_composer.sh /home/vagrant/composer/
-#COMPOSER_PHAR=/home/vagrant/composer/composer
+mkdir -p $RPM_BUILD_DIR/composer/
+utils/install_composer.sh $RPM_BUILD_DIR/composer/
 # make DESTDIR=$RPM_BUILD_ROOT PREFIX=%{_usr} SYSCONFDIR=%{_sysconfdir}/fossology LOCALSTATEDIR=%{_var} LIBDIR=%{_libdir} composer_install
 
 #
@@ -230,6 +229,7 @@ make SYSCONFDIR=%{_sysconfdir}/fossology PREFIX=%{_usr} LOCALSTATEDIR=%{_var} -C
 #
 
 %install
+export COMPOSER_PHAR=$RPM_BUILD_DIR/composer/composer
 make DESTDIR=$RPM_BUILD_ROOT PREFIX=%{_usr} SYSCONFDIR=%{_sysconfdir}/fossology LOCALSTATEDIR=%{_var} LIBDIR=%{_libdir} install_offline
 make DESTDIR=$RPM_BUILD_ROOT PREFIX=%{_usr} SYSCONFDIR=%{_sysconfdir}/fossology LOCALSTATEDIR=%{_var} LIBDIR=%{_libdir} -C install/ -f Makefile install
 make DESTDIR=$RPM_BUILD_ROOT PREFIX=%{_usr} SYSCONFDIR=%{_sysconfdir}/fossology LOCALSTATEDIR=%{_var} LIBDIR=%{_libdir} -C src/nomos/agent/ -f Makefile.sa install

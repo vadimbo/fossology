@@ -32,7 +32,8 @@ pbrepo fossology = http://www.fossology.org/releases
 #
 # Packager label
 #
-pbpackager fossology = Bruno Corne <bruno.cornec@hpe.com>
+
+pbpackager fossology = Bruno Cornec <bruno.cornec@hpe.com>
 #
 
 #
