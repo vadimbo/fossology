@@ -1,6 +1,8 @@
 #
 # Spec file for fossology for building rpm packages
 #
+# SPDX-License-Identifier: GPL-2.0
+#
 # Copying and distribution of this file, with or without modification,
 # are permitted in any medium without royalty provided the copyright
 # notice and this notice are preserved.  This file is offered as-is,
@@ -97,12 +99,11 @@ Requires:       fossology-web
 Summary:        SPDX and DEP5 extensions
 Group:          PBGRP
 
-# TODO reactivate ninka 
-#%package ninka
-#Requires:       fossology-common
+%package ninka
+Requires:       fossology-common
 #Recommends:     ninka >=1.2
-#Summary:        Architecture for analyzing software, Ninka
-#Group:          PBGRP
+Summary:        Architecture for analyzing software, Ninka
+Group:          PBGRP
 
 %package decider
 Requires:       fossology-common
@@ -184,8 +185,8 @@ This package contains the debug UI.
 %description spdx2
 This package contains the SPDX v2 agent programs and their resources.
 
-# %description ninka
-# This package contains the ninka wrapper agent programs and their resources.
+%description ninka
+This package contains the ninka wrapper agent programs and their resources.
 
 %description decider
 This package contains the decider agent programs and their resources.
@@ -316,10 +317,10 @@ cp VERSION $RPM_BUILD_ROOT%{_sysconfdir}/PBPROJ/
 %{_sysconfdir}/PBPROJ/mods-enabled/readmeoss
 %{_datadir}/PBPROJ/readmeoss/*
 
-#%files ninka
-#%defattr(-,root,root)
-#%{_sysconfdir}/PBPROJ/mods-enabled/ninka
-#%{_datadir}/PBPROJ/ninka/*
+%files ninka
+%defattr(-,root,root)
+%{_sysconfdir}/PBPROJ/mods-enabled/ninka
+%{_datadir}/PBPROJ/ninka/*
 
 %files decider
 %defattr(-,root,root)
