@@ -51,6 +51,10 @@ yum update -y
 yum install -y project-builder
 yum install -y subversion
 yum install -y perl-ExtUtils-MakeMaker 
+# Fix a Fedora-26 issue
+cat >> /etc/pb/pb.conf << EOF
+osupd fedora-25 = sudo /usr/bin/dnf makecache fast; sudo /usr/bin/dnf -y update
+EOF
 
 # adding docker install info for prepping the project builder installation runs
 cat > /etc/yum.repos.d/docker.repo << EOF
